@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+* {
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* Premium form controls with a modern, friendly feel */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="time"],
+input[type="date"],
+select,
+textarea {
+  border-radius: 0.75rem !important; /* Friendly 12px rounding */
+  border: 1px solid #e2e8f0 !important; /* Softer slate-200 border */
+  padding-top: 0.625rem !important;
+  padding-bottom: 0.625rem !important;
+  padding-left: 0.875rem !important;
+  padding-right: 0.875rem !important;
+  background-color: #ffffff !important;
+  color: #0f172a !important; /* slate-900 */
+  font-weight: 500 !important;
+  font-size: 0.8125rem !important; /* Slightly more readable text */
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02) !important;
+}
+
+/* Premium custom focus state utilizing the app's gold accent */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="time"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+  outline: none !important;
+  border-color: #f4c542 !important; /* elegant gold accent border */
+  box-shadow: 0 0 0 4px rgba(244, 197, 66, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+  background-color: #ffffff !important;
+}
+
+/* Smooth placeholder decoration */
+::placeholder {
+  color: #94a3b8 !important; /* slate-400 placeholder */
+  font-weight: 400 !important;
+}
+
+/* Strip default styling for custom nested inputs inside login components */
+.group\/input input {
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  width: 100% !important;
+}
+
+.group\/input input:focus {
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  ring: 0 !important;
+}
+
+/* Modern & friendly button interactions */
+button {
+  border-radius: 0.75rem !important; /* matching 12px rounded-xl */
+  font-weight: 700 !important;
+  letter-spacing: 0.025em !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Micro-animations to breathe life under human touch */
+button:not(:disabled) {
+  cursor: pointer !important;
+}
+
+button:not(:disabled):hover {
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+}
+
+button:not(:disabled):active {
+  transform: translateY(0.5px) !important;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.03) !important;
+}
