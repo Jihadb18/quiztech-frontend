@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Users, BookOpen, Clock, ShieldCheck, Key, Plus, Trash2, CheckCircle, XCircle, Layers, Sliders, ArrowLeftRight, Pencil, AlertTriangle, Megaphone, Bell, Send, } from "lucide-react";
+import { Users, BookOpen, Clock, ShieldCheck, Key, Trash2, CheckCircle, XCircle, Layers, Sliders,
+   ArrowLeftRight, Pencil, AlertTriangle, Megaphone, Bell, Send, FileText, Info,School ,Search, Plus, ArrowRight,Filter,} from "lucide-react";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, } from "recharts";
 export default function AdminDashboard({ currentUser, users, classes, subjects, exams, auditLogs, announcements = [], notifications = [], onSyncAnnouncements: parentSyncAnnouncements, onSyncNotifications: parentSyncNotifications, }) {
     const [activeTab, setActiveTab] = useState("stats");
@@ -435,6 +436,18 @@ export default function AdminDashboard({ currentUser, users, classes, subjects, 
             setRejectionFeedback("");
         }
     };
+
+    const getIcon = (type) => {
+  switch (type) {
+    case "alert":
+      return <AlertTriangle size={14} className="text-red-500" />;
+    case "success":
+      return <CheckCircle size={14} className="text-emerald-500" />;
+    default:
+      return <Info size={14} className="text-slate-500" />;
+  }
+};
+
     return (<div id="admin-dashboard" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 font-sans text-left">
       {/* Banner */}
       <div className="bg-[#0f172b] p-6 rounded-2xl text-white shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
@@ -445,24 +458,36 @@ export default function AdminDashboard({ currentUser, users, classes, subjects, 
           <h1 className="text-2xl md:text-3xl font-black">{currentUser?.name || "Yassmine Chraibi"}</h1>
           <p className="text-xs font-semibold text-slate-400">QuizTech Administrateur - HighTech School</p>
         </div>
-        <div className="bg-white/70 border  px-4 py-3 rounded-2xl flex items-center gap-3 shadow-sm hover:shadow-md transition-all duration-300">
-  
-  <div className="w-10 h-10 rounded-xl bg-[#FBD057]/40 flex items-center justify-center">
-    <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+<div className="bg-white/20 border border-slate-100/20 rounded-2xl px-4 py-3 shadow-sm hover:shadow-md transition flex items-center justify-between gap-4">
+
+  {/* LEFT ICON */}
+  <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center relative">
+
+    <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
+
+    {/* subtle glow */}
+    <span className="absolute inset-0 rounded-xl bg-emerald-400/10"></span>
+
   </div>
 
-  <div>
-    <span className="block text-[10px] text-slate-500 uppercase tracking-wider font-bold">
+  {/* TEXT */}
+  <div className="flex-1">
+    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 ">
       Sessions actives
-    </span>
+    </p>
 
-    <span className="text-slate-900 font-extrabold text-sm flex items-center gap-2 mt-0.5">
-      {onlineCount}
-      <span className="text-emerald-600 font-semibold text-xs">
-        connecté(s)
+    <div className="flex items-baseline gap-2 mt-0.5">
+      <span className="text-lg text-white font-black">
+        {onlineCount}
       </span>
-    </span>
+
+      <span className="text-xs font-semibold text-emerald-600">
+        en ligne
+      </span>
+    </div>
   </div>
+
+ 
 
 </div>
       </div>
@@ -547,72 +572,193 @@ export default function AdminDashboard({ currentUser, users, classes, subjects, 
 
       {/* Users Tab */}
       {activeTab === "users" && (<div className="space-y-6">
-          <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white p-4 rounded-xl border">
-            <div className="flex gap-2 w-full md:w-auto">
-              <input type="text" placeholder="Rechercher nom, e-mail..." value={userSearch} onChange={(e) => setUserSearch(e.target.value)} className="p-2 border rounded-lg text-xs font-semibold outline-none focus:border-[#F4C542] w-52 bg-slate-50"/>
-              <select value={userRoleFilter} onChange={(e) => setUserRoleFilter(e.target.value)} className="p-2 border rounded-lg text-xs font-semibold outline-none bg-slate-50 text-slate-700">
-                <option value="ALL">Tous les rôles</option>
-                <option value="STUDENT">Étudiants</option>
-                <option value="TEACHER">Enseignants</option>
-                <option value="ADMIN">Administrateurs</option>
-              </select>
-            </div>
-            <button onClick={() => {
-                setShowAddUserModal(true);
-                setTempPasswordToDisplay("");
-            }} className="px-4 py-2 bg-[#0F172A] hover:bg-slate-800 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1 cursor-pointer">
-              <Plus className="w-4 h-4"/> Créer un nouvel utilisateur
-            </button>
-          </div>
 
-          <div className="bg-white rounded-2xl border overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left font-sans text-xs">
-                <thead>
-                  <tr className="bg-slate-50 border-b text-[10px] font-extrabold uppercase text-slate-400">
-                    <th className="p-4">Utilisateur</th>
-                    <th className="p-4">Rôle</th>
-                    <th className="p-4">Statut</th>
-                    <th className="p-4">Date Inscription</th>
-                    <th className="p-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y text-slate-700">
-                  {mappedUsers
-                .filter((u) => {
-                const mS = u.fullName.toLowerCase().includes(userSearch.toLowerCase()) || u.email.toLowerCase().includes(userSearch.toLowerCase());
-                const mR = userRoleFilter === "ALL" || u.role === userRoleFilter;
-                return mS && mR;
-            })
-                .map((u) => (<tr key={u.id} className="hover:bg-slate-50/50">
-                        <td className="p-4 flex items-center gap-2">
-                          <img src={u.avatarUrl} alt="" className="w-7 h-7 rounded-full bg-slate-100 border object-cover"/>
-                          <div>
-                            <span className="font-extrabold text-slate-900 block">{u.fullName}</span>
-                            <span className="text-[10px] text-slate-400 font-mono block">{u.email}</span>
-                          </div>
-                        </td>
-                        <td className="p-4">
-                          <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase border ${u.role === "ADMIN" ? "bg-red-50 text-red-700 border-red-200" : u.role === "TEACHER" ? "bg-indigo-50 text-indigo-750 border-indigo-200" : "bg-emerald-50 text-emerald-700 border-emerald-200"}`}>
-                            {u.role}
-                          </span>
-                        </td>
-                        <td className="p-4 font-bold">
-                          {u.status === "ONLINE" ? (<span className="text-green-600 flex items-center gap-1"><span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"/> En ligne</span>) : (<span className="text-slate-400">Offline</span>)}
-                        </td>
-                        <td className="p-4 font-mono">{u.joinedDate}</td>
-                        <td className="p-4 text-right">
-                          <div className="flex gap-2 justify-end">
-                            <button onClick={() => handleResetPasswordAction(u)} className="p-1 border rounded hover:border-[#F4C542] text-slate-500 hover:text-slate-800 cursor-pointer" title="Mot de passe"><Key className="w-3.5 h-3.5"/></button>
-                            <button onClick={() => handleStartEditUser(u)} className="p-1 border rounded hover:border-indigo-500 text-slate-500 hover:text-indigo-600 cursor-pointer" title="Éditer"><Pencil className="w-3.5 h-3.5"/></button>
-                            {u.id !== currentUser?.id && (<button onClick={() => setDeletingUser(u)} className="p-1 border border-red-100 hover:border-red-300 rounded text-red-650 hover:bg-red-50 cursor-pointer"><Trash2 className="w-3.5 h-3.5"/></button>)}
-                          </div>
-                        </td>
-                      </tr>))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+<div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition flex flex-col md:flex-row justify-between gap-4">
+
+  {/* LEFT: Search + Filter */}
+  <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+
+    {/* Search */}
+    <div className="relative">
+
+      <Search className="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400" />
+
+      <input
+        type="text"
+        placeholder="        Rechercher nom, e-mail..."
+        value={userSearch}
+        onChange={(e) => setUserSearch(e.target.value)}
+        className="pl-9 pr-3 py-2 w-full sm:w-60 border border-slate-200 rounded-xl text-xs font-medium bg-slate-50 outline-none focus:ring-2 focus:ring-[#FBD057]/30 focus:border-[#FBD057] transition"
+      />
+
+    </div>
+
+    {/* Filter */}
+    <div className="relative">
+
+      <Filter className="w-3.5 h-3.5 absolute  right-6 top-3 text-slate-400" />
+
+      <select
+        value={userRoleFilter}
+        onChange={(e) => setUserRoleFilter(e.target.value)}
+        className="pl-9 pr-3 py-2 border border-slate-200 rounded-xl text-xs font-bold bg-slate-50 text-slate-700 outline-none focus:ring-2 focus:ring-[#FBD057]/30 transition"
+      >
+        <option value="ALL">Tous les rôles</option>
+        <option value="STUDENT">Étudiants</option>
+        <option value="TEACHER">Enseignants</option>
+        <option value="ADMIN">Administrateurs</option>
+      </select>
+
+    </div>
+
+  </div>
+
+  {/* RIGHT: Action Button */}
+  <button
+    onClick={() => {
+      setShowAddUserModal(true);
+      setTempPasswordToDisplay("");
+    }}
+    className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[#FBD057] text-slate-900 font-black hover:scale-[1.02] active:scale-95 transition shadow-sm"
+  >
+    <Plus className="w-4 h-4" />
+    Nouvel utilisateur
+  </button>
+
+</div>
+
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+
+  <div className="overflow-x-auto">
+
+    <table className="w-full text-left text-xs">
+
+      {/* HEADER */}
+      <thead>
+        <tr className="bg-slate-50 border-b text-[10px] font-black uppercase tracking-wider text-slate-400">
+          <th className="p-4">Utilisateur</th>
+          <th className="p-4">Rôle</th>
+          <th className="p-4">Statut</th>
+          <th className="p-4">Inscription</th>
+          <th className="p-4 text-right">Actions</th>
+        </tr>
+      </thead>
+
+      {/* BODY */}
+      <tbody className="divide-y divide-slate-100">
+
+        {mappedUsers
+          .filter((u) => {
+            const mS =
+              u.fullName.toLowerCase().includes(userSearch.toLowerCase()) ||
+              u.email.toLowerCase().includes(userSearch.toLowerCase());
+
+            const mR = userRoleFilter === "ALL" || u.role === userRoleFilter;
+
+            return mS && mR;
+          })
+          .map((u) => (
+
+            <tr
+              key={u.id}
+              className="hover:bg-slate-50/40 transition"
+            >
+
+              {/* USER */}
+              <td className="p-4">
+                <div className="flex items-center gap-3">
+
+                  <img
+                    src={u.avatarUrl}
+                    alt=""
+                    className="w-9 h-9 rounded-full border object-cover"
+                  />
+
+                  <div className="leading-tight">
+                    <span className="font-bold text-slate-900 block">
+                      {u.fullName}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono">
+                      {u.email}
+                    </span>
+                  </div>
+
+                </div>
+              </td>
+
+              {/* ROLE */}
+              <td className="p-4">
+                <span
+                  className={`text-[9px] font-black px-2 py-1 rounded-full border uppercase tracking-wide
+                  ${
+                    u.role === "ADMIN"
+                      ? "bg-red-50 text-red-700 border-red-200"
+                      : u.role === "TEACHER"
+                      ? "bg-indigo-50 text-indigo-700 border-indigo-200"
+                      : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                  }`}
+                >
+                  {u.role}
+                </span>
+              </td>
+
+              {/* STATUS */}
+              <td className="p-4">
+                {u.status === "ONLINE" ? (
+                  <span className="flex items-center gap-2 text-emerald-600 font-semibold">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    Online
+                  </span>
+                ) : (
+                  <span className="text-slate-400">Offline</span>
+                )}
+              </td>
+
+              {/* DATE */}
+              <td className="p-4 font-mono text-slate-500">
+                {u.joinedDate}
+              </td>
+
+              {/* ACTIONS */}
+              <td className="p-4">
+                <div className="flex justify-end gap-2">
+
+                  <button
+                    onClick={() => handleResetPasswordAction(u)}
+                    className="p-2 rounded-lg border border-slate-200 hover:border-[#FBD057] hover:bg-[#FBD057]/10 transition"
+                  >
+                    <Key className="w-3.5 h-3.5 text-slate-500" />
+                  </button>
+
+                  <button
+                    onClick={() => handleStartEditUser(u)}
+                    className="p-2 rounded-lg border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 transition"
+                  >
+                    <Pencil className="w-3.5 h-3.5 text-slate-500" />
+                  </button>
+
+                  {u.id !== currentUser?.id && (
+                    <button
+                      onClick={() => setDeletingUser(u)}
+                      className="p-2 rounded-lg border border-red-100 hover:bg-red-50 hover:border-red-300 transition"
+                    >
+                      <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                    </button>
+                  )}
+
+                </div>
+              </td>
+
+            </tr>
+
+          ))}
+
+      </tbody>
+
+    </table>
+
+  </div>
+</div>
 
           {/* User Add Modal */}
           {showAddUserModal && (<div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
@@ -715,110 +861,347 @@ export default function AdminDashboard({ currentUser, users, classes, subjects, 
             </div>)}
         </div>)}
 
-      {/* Classes tab */}
-      {activeTab === "classes" && (<div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-2xl border space-y-4">
-              <h3 className="text-xs font-black uppercase text-slate-950 pb-2 border-b">Créer une Promotion</h3>
-              <form onSubmit={handleCreateClass} className="space-y-3 text-xs font-semibold">
-                <div>
-                  <label className="block text-[10px] uppercase text-slate-400 mb-1">Intitulé</label>
-                  <input type="text" required placeholder="Génie Logiciel" value={newClassName} onChange={(e) => setNewClassName(e.target.value)} className="w-full p-2 border rounded bg-slate-50"/>
-                </div>
-                <button type="submit" className="w-full py-2 bg-slate-900 text-white font-bold rounded">Ajouter la promotion</button>
-              </form>
-            </div>
+   
 
-            <div className="bg-white p-6 rounded-2xl border md:col-span-2 space-y-4">
-              <h3 className="text-xs font-black uppercase text-slate-950 pb-2 border-b">Sélectionnez la Promotion d'étude</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-40 overflow-y-auto">
-                {mappedClasses.map((c) => (<button key={c.id} onClick={() => setSelectedClassId(c.id)} className={`p-3 text-left border rounded-xl flex items-center justify-between cursor-pointer ${selectedClassId === c.id ? "bg-amber-50/20 border-[#F4C542] font-bold text-slate-950" : "hover:border-slate-305 text-slate-650"}`}>
-                    <span>{c.name}</span>
-                    <span className="text-[10px] bg-slate-900 text-white px-2 py-0.5 rounded-full">{c.studentIds.length} élèves</span>
-                  </button>))}
-              </div>
-            </div>
+{activeTab === "classes" && (
+  <div className="space-y-6 text-xs font-medium">
+
+    {/* ================= TOP GRID ================= */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      {/* CREATE CLASS */}
+      <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition space-y-4">
+
+        <div className="flex items-center gap-2 pb-3 border-b">
+          <Plus className="w-4 h-4 text-[#FBD057]" />
+          <h3 className="text-[11px] font-black uppercase tracking-wider text-slate-900">
+            Créer une promotion
+          </h3>
+        </div>
+
+        <form onSubmit={handleCreateClass} className="space-y-3">
+
+          <div>
+            <label className="block text-[10px] font-bold uppercase text-slate-500 mb-2">
+              Intitulé
+            </label>
+
+            <input
+              type="text"
+              required
+              placeholder="Ex: Génie Logiciel"
+              value={newClassName}
+              onChange={(e) => setNewClassName(e.target.value)}
+              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-[#FBD057]/30 focus:border-[#FBD057] transition"
+            />
           </div>
 
-          {currentClassObj && (<div className="bg-white p-6 rounded-2xl border space-y-6 text-xs">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 gap-4">
-                <div>
-                  <h3 className="font-extrabold text-slate-805 uppercase tracking-widest text-[11px]">Pupitre de Transfert : <span className="text-[#F4C542]">{currentClassObj.name}</span></h3>
-                  <p className="text-[9px] text-slate-400 mt-1 uppercase">Allocations affectées : {classStudentsList.length} bacheliers</p>
-                </div>
-                <input type="text" placeholder="Filtrer par nom..." value={studentSearchFilter} onChange={(e) => setStudentSearchFilter(e.target.value)} className="p-2 border rounded text-xs w-48 bg-slate-50 outline-none"/>
-              </div>
+          <button
+            type="submit"
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#FBD057] text-slate-900 font-black hover:scale-[1.02] active:scale-95 transition"
+          >
+            <Plus className="w-4 h-4" />
+            Ajouter
+          </button>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 font-semibold">
-                <div className="space-y-3">
-                  <div className="bg-slate-50 p-2.5 border rounded flex justify-between uppercase text-[10px] text-slate-700"><span>Disponibles à l'école</span><span>{availableStudentsList.length}</span></div>
-                  <div className="space-y-1.5 max-h-60 overflow-y-auto p-1.5 border rounded bg-slate-50/50">
-                    {availableStudentsList
-                    .filter((s) => s.fullName.toLowerCase().includes(studentSearchFilter.toLowerCase()))
-                    .map((student) => (<div key={student.id} className="p-2 bg-white rounded border flex justify-between items-center shadow-xs">
-                          <span>{student.fullName}</span>
-                          <button onClick={() => handleAssignStudent(student.id)} className="px-2 py-0.5 bg-slate-900 text-white rounded text-[10px]">Inscrire +</button>
-                        </div>))}
-                  </div>
-                </div>
+        </form>
 
-                <div className="space-y-3">
-                  <div className="bg-indigo-50 border p-2.5 rounded flex justify-between uppercase text-[10px] text-indigo-905"><span>Inscrits à la promotion</span><span>{classStudentsList.length}</span></div>
-                  <div className="space-y-1.5 max-h-60 overflow-y-auto p-1.5 border rounded bg-indigo-50/20">
-                    {classStudentsList
-                    .filter((s) => s.fullName.toLowerCase().includes(studentSearchFilter.toLowerCase()))
-                    .map((student) => (<div key={student.id} className="p-2 bg-white rounded border flex justify-between items-center shadow-xs">
-                          <span>{student.fullName}</span>
-                          <button onClick={() => handleUnassignStudent(student.id)} className="px-2 py-0.5 border text-red-650 hover:bg-red-50 rounded text-[10px]">Retirer x</button>
-                        </div>))}
+      </div>
+
+      {/* CLASS LIST */}
+      <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition md:col-span-2 space-y-4">
+
+        <div className="flex items-center gap-2 pb-3 border-b">
+          <School className="w-4 h-4 text-[#FBD057]" />
+          <h3 className="text-[11px] font-black uppercase tracking-wider text-slate-900">
+            Promotions disponibles
+          </h3>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-44 overflow-y-auto pr-1">
+
+          {mappedClasses.map((c) => (
+            <button
+              key={c.id}
+              onClick={() => setSelectedClassId(c.id)}
+              className={`p-3 rounded-xl border flex items-center justify-between transition text-left
+                ${selectedClassId === c.id
+                  ? "border-[#FBD057] bg-[#FBD057]/10"
+                  : "border-slate-100 hover:border-slate-200 bg-white"
+                }`}
+            >
+
+              <span className="font-semibold text-slate-900">
+                {c.name}
+              </span>
+
+              <span className="text-[10px] bg-slate-900 text-white px-2 py-0.5 rounded-full">
+                {c.studentIds.length}
+              </span>
+
+            </button>
+          ))}
+
+        </div>
+
+      </div>
+
+    </div>
+
+    {/* ================= CLASS DETAILS ================= */}
+    {currentClassObj && (
+      <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition space-y-6">
+
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between gap-4 pb-4 border-b">
+
+          <div>
+            <h3 className="text-[11px] font-black uppercase tracking-wider text-slate-900">
+              Gestion de la promotion :
+              <span className="text-[#FBD057] ml-1">
+                {currentClassObj.name}
+              </span>
+            </h3>
+
+            <p className="text-[10px] text-slate-500 mt-1 uppercase font-bold">
+              {classStudentsList.length} étudiants assignés
+            </p>
+          </div>
+
+          {/* Search */}
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400" />
+
+            <input
+              type="text"
+              placeholder="         Rechercher étudiant..."
+              value={studentSearchFilter}
+              onChange={(e) => setStudentSearchFilter(e.target.value)}
+              className="pl-7 pr-3 py-2 border rounded-xl text-xs bg-white outline-none focus:ring-2 focus:ring-[#FBD057]/30"
+            />
+          </div>
+
+        </div>
+
+        {/* STUDENTS */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          {/* AVAILABLE */}
+          <div className="space-y-3">
+
+            <div className="flex justify-between text-[10px] uppercase font-black text-slate-600 bg-slate-50 border rounded-xl p-2.5">
+              <span>Disponibles</span>
+              <span>{availableStudentsList.length}</span>
+            </div>
+
+            <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+
+              {availableStudentsList
+                .filter((s) =>
+                  s.fullName.toLowerCase().includes(studentSearchFilter.toLowerCase())
+                )
+                .map((student) => (
+                  <div
+                    key={student.id}
+                    className="p-3 bg-white border border-slate-100 rounded-xl flex justify-between items-center hover:bg-slate-50 transition"
+                  >
+
+                    <span className="font-medium text-slate-900">
+                      {student.fullName}
+                    </span>
+
+                    <button
+                      onClick={() => handleAssignStudent(student.id)}
+                      className="text-[10px] px-2 py-1 rounded-lg bg-slate-900 text-white hover:scale-105 active:scale-95 transition"
+                    >
+                      Inscrire +
+                    </button>
+
                   </div>
-                </div>
-              </div>
-            </div>)}
-        </div>)}
+                ))}
+
+            </div>
+
+          </div>
+
+          {/* ASSIGNED */}
+          <div className="space-y-3">
+
+            <div className="flex justify-between text-[10px] uppercase font-black text-slate-600 bg-[#FBD057]/10 border border-[#FBD057]/20 rounded-xl p-2.5">
+              <span>Inscrits</span>
+              <span>{classStudentsList.length}</span>
+            </div>
+
+            <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+
+              {classStudentsList
+                .filter((s) =>
+                  s.fullName.toLowerCase().includes(studentSearchFilter.toLowerCase())
+                )
+                .map((student) => (
+                  <div
+                    key={student.id}
+                    className="p-3 bg-white border border-slate-100 rounded-xl flex justify-between items-center hover:bg-slate-50 transition"
+                  >
+
+                    <span className="font-medium text-slate-900">
+                      {student.fullName}
+                    </span>
+
+                    <button
+                      onClick={() => handleUnassignStudent(student.id)}
+                      className="text-[10px] px-2 py-1 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition"
+                    >
+                      Retirer
+                    </button>
+
+                  </div>
+                ))}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    )}
+
+  </div>
+)}
 
       {/* Validation Queue Tab */}
       {activeTab === "validation" && (<div className="space-y-6 text-xs font-semibold">
-          <div className="bg-white rounded-2xl border overflow-hidden">
-            <div className="px-6 py-4 bg-slate-50 border-b">
-              <span className="text-xs font-black uppercase text-slate-750">Validation des Formulaires d'Examen</span>
+          <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
+
+  {/* HEADER */}
+  <div className="px-6 py-4 bg-slate-50 border-b flex items-center justify-between">
+    <span className="text-xs font-black uppercase tracking-wider text-slate-700">
+      Validation des examens
+    </span>
+
+    <span className="text-[10px] font-bold text-slate-500">
+      {mappedExams.filter((e) => e.status === "PENDING_VALIDATION").length} en attente
+    </span>
+  </div>
+
+  {/* EMPTY STATE */}
+  {mappedExams.filter((e) => e.status === "PENDING_VALIDATION").length === 0 ? (
+    <div className="p-14 text-center space-y-3">
+      <CheckCircle className="w-12 h-12 text-emerald-500 mx-auto" />
+      <p className="font-bold text-slate-800">
+        Aucun examen en attente
+      </p>
+      <p className="text-xs text-slate-400">
+        Tout est validé et conforme.
+      </p>
+    </div>
+  ) : (
+
+    <div className="divide-y">
+
+      {mappedExams
+        .filter((e) => e.status === "PENDING_VALIDATION")
+        .map((exam) => (
+
+          <div key={exam.id} className="p-6 space-y-5 hover:bg-slate-50/30 transition">
+
+            {/* TOP INFO */}
+            <div className="flex flex-col md:flex-row justify-between gap-4">
+
+              {/* LEFT */}
+              <div className="space-y-2">
+
+                <span className="text-[9px] font-black uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded-full w-fit">
+                  {subjects.find((s) => s.id === exam.subjectId)?.name || "Matière"}
+                </span>
+
+                <h3 className="text-base font-extrabold text-slate-900">
+                  {exam.title}
+                </h3>
+
+                <p className="text-xs text-slate-500 max-w-xl leading-relaxed">
+                  {exam.description}
+                </p>
+
+                <div className="flex gap-3 text-[10px] text-slate-400 font-semibold">
+                  <span>⚖ Coef {exam.coefficient}</span>
+                  <span>⏱ {exam.durationMinutes} min</span>
+                </div>
+
+              </div>
+
+              {/* ACTIONS */}
+              <div className="flex gap-2 md:items-start">
+
+                <button
+                  onClick={() => handleApproveExam(exam.id)}
+                  className="flex items-center gap-1 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black transition"
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  Valider
+                </button>
+
+                <button
+                  onClick={() => setRejectId(exam.id)}
+                  className="flex items-center gap-1 px-3 py-2 rounded-xl bg-red-500 hover:bg-red-600 text-white text-xs font-black transition"
+                >
+                  <XCircle className="w-4 h-4" />
+                  Rejeter
+                </button>
+
+              </div>
+
             </div>
 
-            {mappedExams.filter((e) => e.status === "PENDING_VALIDATION").length === 0 ? (<div className="p-12 text-center text-slate-400 space-y-2 select-none">
-                <CheckCircle className="w-12 h-12 text-emerald-500 mx-auto"/>
-                <p className="font-bold text-slate-800">Aucun sujet d'examen en attente d'arbitrage.</p>
-                <p className="text-[11px] text-slate-400">Tout est arbitré et en conformité.</p>
-              </div>) : (<div className="divide-y">
-                {mappedExams
-                    .filter((e) => e.status === "PENDING_VALIDATION")
-                    .map((exam) => (<div key={exam.id} className="p-6 space-y-4">
-                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                        <div>
-                          <span className="bg-slate-100 text-[9px] font-bold uppercase rounded-full px-2 py-0.5 tracking-wider">
-                            {subjects.find((s) => s.id === exam.subjectId)?.name || "Matière"}
-                          </span>
-                          <h4 className="font-extrabold text-[#0f172b] text-base mt-1">{exam.title}</h4>
-                          <p className="text-xs text-slate-500 mt-1 max-w-xl">{exam.description}</p>
-                          <p className="text-[10px] text-slate-400 mt-2">Coefficient : {exam.coefficient} &bull; Durée : {exam.durationMinutes} minutes</p>
-                        </div>
-                        <div className="flex gap-2">
-                          <button onClick={() => handleApproveExam(exam.id)} className="px-3.5 py-1.5 bg-green-600 hover:bg-green-700 text-white font-extrabold rounded-lg flex items-center gap-1 cursor-pointer"><CheckCircle className="w-4 h-4"/> Approuver</button>
-                          <button onClick={() => setRejectId(exam.id)} className="px-3.5 py-1.5 bg-red-650 hover:bg-red-700 text-white font-extrabold rounded-lg flex items-center gap-1 cursor-pointer"><XCircle className="w-4 h-4"/> Rejeter</button>
-                        </div>
-                      </div>
+            {/* QUESTIONS PREVIEW */}
+            <div className="bg-slate-50 border rounded-xl p-4 space-y-2 max-h-44 overflow-y-auto">
 
-                      <div className="bg-slate-50 p-3.5 rounded-xl border max-h-40 overflow-y-auto text-left space-y-2">
-                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Relecture des {exam.questions.length} questions :</span>
-                        {exam.questions.map((q, idx) => (<div key={q.id} className="text-[10px] text-slate-600"><strong>Item {idx + 1} ({q.type}) :</strong> {q.prompt}</div>))}
-                      </div>
+              <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                Aperçu des questions ({exam.questions.length})
+              </span>
 
-                      {rejectId === exam.id && (<form onSubmit={handleRejectExam} className="bg-red-50 p-4 border rounded-xl flex gap-3 items-center">
-                          <input type="text" required placeholder="Motifs du rejet disciplinaire..." value={rejectionFeedback} onChange={(e) => setRejectionFeedback(e.target.value)} className="flex-1 p-2 border border-red-200 rounded text-xs bg-white outline-none"/>
-                          <button type="submit" className="px-3 py-2 bg-slate-900 text-white rounded font-bold">Confirmer Rejet</button>
-                        </form>)}
-                    </div>))}
-              </div>)}
+              {exam.questions.map((q, idx) => (
+                <div key={q.id} className="text-[10px] text-slate-600">
+                  <span className="font-bold text-slate-800">
+                    Q{idx + 1} ({q.type})
+                  </span>
+                  {" "}— {q.prompt}
+                </div>
+              ))}
+
+            </div>
+
+            {/* REJECTION FORM */}
+            {rejectId === exam.id && (
+              <div className="bg-red-50 border border-red-100 rounded-xl p-4 flex flex-col md:flex-row gap-3 items-stretch md:items-center">
+
+                <input
+                  type="text"
+                  required
+                  placeholder="Motif du rejet..."
+                  value={rejectionFeedback}
+                  onChange={(e) => setRejectionFeedback(e.target.value)}
+                  className="flex-1 p-2 text-xs rounded-lg border border-red-200 bg-white outline-none focus:ring-2 focus:ring-red-200"
+                />
+
+                <button
+                  onClick={handleRejectExam}
+                  className="px-4 py-2 bg-slate-900 text-white rounded-lg text-xs font-black hover:bg-slate-800 transition"
+                >
+                  Confirmer
+                </button>
+
+              </div>
+            )}
+
           </div>
+
+        ))}
+
+    </div>
+  )}
+</div>
         </div>)}
 
       {/* Audit Logs Tab */}
@@ -890,7 +1273,8 @@ export default function AdminDashboard({ currentUser, users, classes, subjects, 
         </div>)}
 
       {/* Services Communs Tab */}
-      {activeTab === "communs" && (<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-xs font-semibold">
+      {activeTab === "communs" && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-xs font-semibold">
           <div className="space-y-6">
             <div className="bg-white p-6 rounded-2xl border space-y-4">
               <div className="flex items-center gap-2 border-b pb-3 font-black uppercase tracking-wider">
@@ -936,45 +1320,142 @@ export default function AdminDashboard({ currentUser, users, classes, subjects, 
               </form>
             </div>
 
-            <div className="bg-white p-6 rounded-2xl border space-y-4">
-              <h3 className="text-xs font-black uppercase pb-2 border-b">Annonces actives ({mappedAnnouncements.length})</h3>
-              <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
-                {mappedAnnouncements.map((ann) => (<div key={ann.id} className="bg-slate-50/50 p-3.5 rounded-xl border flex gap-3 relative group">
-                    <div className="w-7 h-7 bg-slate-900 rounded-full text-[#F4C542] flex items-center justify-center font-bold font-mono text-xs shrink-0 select-none uppercase">{ann.author.slice(0, 2)}</div>
-                    <div>
-                      <div className="flex justify-between w-full">
-                        <strong className="text-slate-900">{ann.author}</strong>
-                        <span className="text-[9px] text-slate-400 ml-4">{new Date(ann.timestamp).toLocaleDateString("fr-FR")}</span>
-                      </div>
-                      <h4 className="font-extrabold text-slate-805 mt-1">{ann.title}</h4>
-                      <p className="text-slate-500 mt-0.5 leading-relaxed">{ann.message}</p>
-                    </div>
-                  </div>))}
+
+            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 space-y-4">
+
+              {/* Header */}
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h3 className="text-[11px] font-black uppercase tracking-wider text-slate-800">
+                  Annonces actives
+                </h3>
+
+                <span className="text-[10px] px-2 py-1 rounded-full bg-[#FBD057]/20 text-slate-700 font-bold">
+                  {mappedAnnouncements.length}
+                </span>
               </div>
+
+              {/* List */}
+              <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
+
+                {mappedAnnouncements.map((ann) => (
+                  <div
+                    key={ann.id}
+                    className="group flex gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50/40 hover:bg-white hover:border-[#FBD057]/30 transition-all duration-300"
+                  >
+
+                    {/* Avatar */}
+                    <div className="w-9 h-9 rounded-xl bg-[#FBD057]/20 text-slate-800 flex items-center justify-center font-bold text-[11px] shrink-0 select-none">
+                      {ann.author.slice(0, 2)}
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1">
+
+                      {/* Top row */}
+                      <div className="flex items-center justify-between gap-2">
+                        <strong className="text-slate-900 text-[12px] font-bold">
+                          {ann.author}
+                        </strong>
+
+                        <span className="text-[9px] text-slate-400 whitespace-nowrap">
+                          {new Date(ann.timestamp).toLocaleDateString("fr-FR")}
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h4 className="text-[12px] font-extrabold text-slate-800 mt-1 flex items-center gap-2">
+                        <Megaphone size={14} className="text-[#FBD057]" />
+                        {ann.title}
+                      </h4>
+
+                      {/* Message */}
+                      <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                        {ann.message}
+                      </p>
+
+                    </div>
+
+                  </div>
+                ))}
+
+              </div>
+
             </div>
+
           </div>
 
           <div className="space-y-6">
-            <div className="bg-white p-6 rounded-2xl border space-y-4">
+           
+              <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-5">
+
               <div className="flex items-center gap-2 border-b pb-3 font-black uppercase tracking-wider">
                 <Bell className="w-5 h-5 text-amber-500"/>
                 <h3>Simulateur de Notifications (Cloche)</h3>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
-                <button onClick={() => onAddNotification("🔴 Alerte Anti-Triche : Changement d'onglet", "Un élève a déclenché une alerte anti-triche : Détection de perte de focus.", "DANGER")} className="p-3 border rounded-xl select-none hover:bg-rose-50 border-red-200 text-left cursor-pointer flex flex-col justify-between h-20 text-[10px]">
-                  <span>🚨</span>
-                  <strong>Alerte triche</strong>
-                </button>
-                <button onClick={() => onAddNotification("🟢 Nouveau sujet d'algorithmique soumis", "Le professeur a soumis un examen final d'Algorithmique.", "VALIDATION")} className="p-3 border rounded-xl select-none hover:bg-emerald-50 border-emerald-200 text-left cursor-pointer flex flex-col justify-between h-20 text-[10px]">
-                  <span>📝</span>
-                  <strong>Sujet soumis</strong>
-                </button>
-                <button onClick={() => onAddNotification("🟡 Maintenance système programmée", "Maintenance système programmée à 23h05.", "INFO")} className="p-3 border rounded-xl select-none hover:bg-amber-50 border-amber-200 text-left cursor-pointer flex flex-col justify-between h-20 text-[10px]">
-                  <span>📢</span>
-                  <strong>Maintenance</strong>
-                </button>
-              </div>
+                <div className="grid grid-cols-3 gap-4">
+
+                  {/* Alerte triche */}
+                  <button
+                    onClick={() =>
+                      onAddNotification(
+                        "🔴 Alerte Anti-Triche : Changement d'onglet",
+                        "Un élève a déclenché une alerte anti-triche : Détection de perte de focus.",
+                        "DANGER"
+                      )
+                    }
+                    className="group p-4 rounded-2xl border border-red-100 bg-white hover:bg-red-50 transition-all duration-300 text-left h-24 flex flex-col justify-between shadow-sm hover:shadow-md"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center text-red-600 group-hover:scale-110 transition">
+                      <AlertTriangle size={18} />
+                    </div>
+
+                    <div>
+                      <p className="text-[11px] font-bold text-slate-900">Alerte triche</p>
+                    </div>
+                  </button>
+
+                  {/* Sujet soumis */}
+                  <button
+                    onClick={() =>
+                      onAddNotification(
+                        "🟢 Nouveau sujet d'algorithmique soumis",
+                        "Le professeur a soumis un examen final d'Algorithmique.",
+                        "VALIDATION"
+                      )
+                    }
+                    className="group p-4 rounded-2xl border border-emerald-100 bg-white hover:bg-emerald-50 transition-all duration-300 text-left h-24 flex flex-col justify-between shadow-sm hover:shadow-md"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600 group-hover:scale-110 transition">
+                      <FileText size={18} />
+                    </div>
+
+                    <div>
+                      <p className="text-[11px] font-bold text-slate-900">Sujet soumis</p>
+                    </div>
+                  </button>
+
+                  {/* Maintenance */}
+                  <button
+                    onClick={() =>
+                      onAddNotification(
+                        "🟡 Maintenance système programmée",
+                        "Maintenance système programmée à 23h05.",
+                        "INFO"
+                      )
+                    }
+                    className="group p-4 rounded-2xl border border-amber-100 bg-white hover:bg-amber-50 transition-all duration-300 text-left h-24 flex flex-col justify-between shadow-sm hover:shadow-md"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600 group-hover:scale-110 transition">
+                      <Megaphone size={18} />
+                    </div>
+
+                    <div>
+                      <p className="text-[11px] font-bold text-slate-900">Maintenance</p>
+                    </div>
+                  </button>
+
+                </div>
 
               <form onSubmit={(e) => {
                 e.preventDefault();
@@ -1003,20 +1484,73 @@ export default function AdminDashboard({ currentUser, users, classes, subjects, 
               </form>
             </div>
 
-            <div className="bg-white p-6 rounded-2xl border space-y-4">
-              <div className="flex justify-between items-center border-b pb-2">
-                <span className="font-extrabold uppercase">Dernières Alertes cloche ({notifications.length})</span>
-                <button onClick={() => onSyncNotifications([])} className="text-red-500 font-extrabold uppercase bg-transparent hover:underline text-[9px]">Purger</button>
-              </div>
-              <div className="space-y-2 max-h-48 overflow-y-auto">
-                {notifications.map((n) => (<div key={n.id} className={`p-2.5 rounded-lg border flex justify-between items-center text-[10px] ${n.type === "alert" ? "bg-red-50 text-red-900" : n.type === "success" ? "bg-emerald-50 text-emerald-900" : "bg-slate-50"}`}>
-                    <div>
-                      <strong className="block">{n.title}</strong>
-                      <span className="text-slate-500">{n.content}</span>
-                    </div>
-                  </div>))}
-              </div>
-            </div>
+
+
+
+<div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 space-y-4">
+
+  {/* Header */}
+  <div className="flex justify-between items-center pb-3 border-b border-slate-100">
+
+    <div className="flex items-center gap-2">
+      <Bell size={16} className="text-[#FBD057]" />
+      <span className="font-extrabold uppercase text-[11px] tracking-wider text-slate-800">
+        Dernières alertes
+      </span>
+
+      <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#FBD057]/20 text-slate-700 font-bold">
+        {notifications.length}
+      </span>
+    </div>
+
+    <button
+      onClick={() => onSyncNotifications([])}
+      className="flex items-center gap-1 text-red-500 hover:text-red-600 font-bold uppercase text-[9px] hover:underline transition"
+    >
+      <Trash2 size={12} />
+      Purger
+    </button>
+  </div>
+
+  {/* List */}
+  <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+
+    {notifications.map((n) => (
+      <div
+        key={n.id}
+        className={`group flex items-start gap-2 p-3 rounded-xl border transition-all duration-300 hover:shadow-sm
+        ${
+          n.type === "alert"
+            ? "bg-red-50 border-red-100"
+            : n.type === "success"
+            ? "bg-emerald-50 border-emerald-100"
+            : "bg-slate-50 border-slate-100"
+        }`}
+      >
+
+        {/* Icon */}
+        <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shrink-0 border">
+          {getIcon(n.type)}
+        </div>
+
+        {/* Content */}
+        <div className="flex-1">
+          <strong className="block text-[11px] text-slate-900">
+            {n.title}
+          </strong>
+
+          <span className="text-[10px] text-slate-500 leading-snug">
+            {n.content}
+          </span>
+        </div>
+
+      </div>
+    ))}
+
+  </div>
+
+</div>
+
           </div>
         </div>)}
     </div>);
