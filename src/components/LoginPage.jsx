@@ -1,7 +1,4 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
+
 import React, { useState } from "react";
 import { Mail, Lock, AlertCircle, Eye, EyeOff, ShieldAlert, Key, ShieldCheck, } from "lucide-react";
 function AuthInput({ label, type, value, onChange, icon: Icon, error, placeholder, showPasswordToggle, onTogglePassword, isPasswordVisible, }) {

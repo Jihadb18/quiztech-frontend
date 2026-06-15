@@ -1,7 +1,4 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
+
 import { initialClasses, initialSubjects, initialUsers, initialExams, initialQuestions, initialAnnouncements, initialResources, initialNotifications, initialAuditLogs } from "../data";
 // Map initial roles to uppercase and transform fullName/name
 export const INITIAL_USERS = initialUsers.map((u) => {

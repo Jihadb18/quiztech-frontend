@@ -1,7 +1,4 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
+
 import React, { useState } from "react";
 import { X, Upload, Trash2, CheckCircle2, AlertCircle, ShieldCheck, } from "lucide-react";
 export default function ProfilePicUploader({ currentUser, onClose, onUpdateUser, }) {

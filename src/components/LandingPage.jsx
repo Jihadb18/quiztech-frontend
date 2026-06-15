@@ -1,12 +1,6 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.5
- */
 import React, { useState, useEffect, useRef } from "react";
-import ChatAssistant from "./ChatAssistant";
 import Footer from "./Footer";
 import { GraduationCap, Zap, Globe, ThumbsUp, Users, BookOpen, BarChart2, ClipboardList, Award, CheckCircle, Menu, X, Mail, Phone, Star, UserCheck, School, FileText, TrendingUp, Lock, Clock, } from "lucide-react";
-// ── SVG Social Icons (no lucide dependency) ────────────────────────────────
 const IconTwitter = () => (<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
   </svg>);
@@ -25,14 +19,12 @@ const socialIcons = [
     <IconFacebook key="f"/>,
     <IconYoutube key="y"/>,
 ];
-// ── New Color Palette Configuration ─────────────────────────────────────────
-const G = "#fbd057"; // Main Yellow Accent
-const G2 = "#fde399"; // Lighter Yellow
-const GL = "#fde399"; // Light background tint (Yellow tint / Base theme background)
-const GD = "#f2c343"; // Darker Gold Accent
-const GDD = "#1e272c"; // Dark Charcoal / Primary Buttons / Backgrounds
-const GT = "#1e272c"; // Text color on bright surfaces
-// ── Hooks ──────────────────────────────────────────────────────────────────
+const G = "#fbd057"; 
+const G2 = "#fde399"; 
+const GL = "#fde399"; 
+const GD = "#f2c343"; 
+const GDD = "#1e272c"; 
+const GT = "#1e272c"; 
 function useScrollY() {
     const [y, setY] = useState(0);
     useEffect(() => {
@@ -90,7 +82,6 @@ function Navbar({ onNavigateLogin }) {
             alignItems: "center",
             height: 58,
         }}>
-        {/* Logo */}
         <a href="#" style={{
             display: "flex",
             alignItems: "center",
@@ -111,7 +102,6 @@ function Navbar({ onNavigateLogin }) {
           </div>
         </a>
 
-        {/* Desktop links */}
         <div className="ht-desktop-nav" style={{ display: "flex", gap: 32, marginRight: 32 }}>
           {links.map((l) => (<a key={l.label} href={l.href} style={{
                 fontSize: 14,
@@ -193,7 +183,7 @@ function Navbar({ onNavigateLogin }) {
         </div>)}
     </nav>);
 }
-// ── Hero Illustration ──────────────────────────────────────────────────────
+
 function HeroIllustration() {
     return (<div style={{
             position: "relative",
@@ -203,50 +193,39 @@ function HeroIllustration() {
             paddingBottom: 60,
         }}>
       <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", height: "auto" }}>
-        {/* Large Yellow Background Blob/Circle */}
         <path d="M 250,60 C 370,60 440,130 440,250 C 440,370 350,440 250,440 C 120,440 60,350 60,250 C 60,110 130,60 250,60 Z" fill="#FBD057"/>
 
-        {/* Ground Shadow Base */}
         <ellipse cx="250" cy="445" rx="210" ry="8" fill="#FBD057"/>
 
-        {/* ── FLOATING ELEMENTS & BUBBLES ── */}
-        {/* Left Bubble: Math (x/-) */}
         <circle cx="130" cy="130" r="32" fill="#FFFFFF" stroke="#1E272C" strokeWidth="2.5"/>
         <rect x="110" y="112" width="40" height="30" rx="4" fill="#FBD057" stroke="#1E272C" strokeWidth="2"/>
         <text x="117" y="133" fill="#1E272C" fontSize="15" fontWeight="bold">
           x/ـ
         </text>
 
-        {/* Top Bubble: Clock */}
         <circle cx="225" cy="80" r="22" fill="#FFFFFF" stroke="#1E272C" strokeWidth="2.5"/>
         <circle cx="225" cy="80" r="14" stroke="#1E272C" strokeWidth="2" fill="#FBD057"/>
         <path d="M225 73 v7 h5" stroke="#1E272C" strokeWidth="2" strokeLinecap="round"/>
-        {/* Clock Gear Teeth Details */}
         <path d="M225 54 v4 M225 102 v-4 M203 80 h4 M247 80 h-4" stroke="#1E272C" strokeWidth="2" strokeLinecap="round"/>
 
-        {/* Right Bubble: Binary Code (01101) */}
         <circle cx="330" cy="120" r="32" fill="#FFFFFF" stroke="#1E272C" strokeWidth="2.5"/>
         <rect x="305" y="105" width="50" height="24" rx="4" fill="#FBD057" stroke="#1E272C" strokeWidth="2"/>
         <text x="311" y="122" fill="#1E272C" fontFamily="monospace" fontSize="12" fontWeight="bold">
           01101
         </text>
 
-        {/* Far Right Bubble: Abstract Hexagon */}
         <circle cx="385" cy="215" r="20" fill="#FFFFFF" stroke="#1E272C" strokeWidth="2"/>
         <polygon points="385,200 398,208 398,222 385,230 372,222 372,208" fill="#FBD057" stroke="#1E272C" strokeWidth="1.5"/>
         <line x1="385" y1="215" x2="385" y2="230" stroke="#1E272C" strokeWidth="1.5"/>
         <line x1="385" y1="215" x2="398" y2="208" stroke="#1E272C" strokeWidth="1.5"/>
         <line x1="385" y1="215" x2="372" y2="208" stroke="#1E272C" strokeWidth="1.5"/>
 
-        {/* Little decorative accents (crosses and shapes) */}
         <path d="M235 185 h6 M238 182 v6" stroke="#1E272C" strokeWidth="1.5" strokeLinecap="round"/>
         <path d="M370 165 h6 M373 162 v6" stroke="#1E272C" strokeWidth="1.5" strokeLinecap="round"/>
         <text x="260" y="115" fill="#1E272C" fontSize="12" fontWeight="bold">
           z
         </text>
 
-        {/* ── ENVIRONMENT (PLANTS & FURNITURE) ── */}
-        {/* Upper Desk Plant */}
         <g transform="translate(80, 210)">
           <path d="M20 35 C5 15 5 0 5 0 C5 0 20 15 20 35 Z" fill="#FDE399" stroke="#1E272C" strokeWidth="2"/>
           <path d="M20 35 C35 15 35 0 35 0 C35 0 20 15 20 35 Z" fill="#FDE399" stroke="#1E272C" strokeWidth="2"/>
@@ -254,7 +233,6 @@ function HeroIllustration() {
           <rect x="10" y="35" width="20" height="20" fill="#FFFFFF" stroke="#1E272C" strokeWidth="2"/>
         </g>
 
-        {/* Large Floor Plant (Bottom Left) */}
         <g transform="translate(45, 327)">
           <path d="M35 80 C10 40 5 10 5 10 C5 10 30 35 35 80 Z" fill="#FBD057" stroke="#1E272C" strokeWidth="2.5"/>
           <path d="M35 80 C60 40 65 10 65 10 C65 10 40 35 35 80 Z" fill="#FBD057" stroke="#1E272C" strokeWidth="2.5"/>
@@ -262,76 +240,52 @@ function HeroIllustration() {
           <polygon points="15,80 55,80 48,120 22,120" fill="#FFFFFF" stroke="#1E272C" strokeWidth="2.5"/>
         </g>
 
-        {/* Ergonomic Office Chair */}
         <g transform="translate(140, 205)">
-          {/* Backrest */}
           <path d="M10 5 C10 5 0 55 5 125 L35 125 C30 55 20 5 20 5 Z" fill="#1E272C" stroke="#1E272C" strokeWidth="2"/>
-          {/* Seat Base Structural Plate */}
           <rect x="15" y="125" width="65" height="10" rx="3" fill="#1E272C"/>
-          {/* Chair Hydraulic Piston & Wheels */}
           <path d="M48 135 v50 L5 215 M48 165 L90 215" stroke="#1E272C" strokeWidth="4" strokeLinecap="round"/>
           <circle cx="5" cy="215" r="6" fill="#1E272C"/>
           <circle cx="48" cy="217" r="6" fill="#1E272C"/>
           <circle cx="90" cy="215" r="6" fill="#1E272C"/>
         </g>
 
-        {/* ── THE STUDENT CHARACTER ── */}
         <g id="student">
-          {/* Torso & White T-Shirt */}
           <path d="M150 250 C180 210 240 210 265 250 L240 330 L165 330 Z" fill="#FFFFFF" stroke="#1E272C" strokeWidth="2.5"/>
 
-          {/* Head & Neck */}
           <path d="M210 210 v15 h10 v-15 Z" fill="#FDE399" stroke="#1E272C" strokeWidth="2"/>
           <circle cx="225" cy="180" r="18" fill="#FDE399" stroke="#1E272C" strokeWidth="2.5"/>
-          {/* Hair */}
           <path d="M210 172 C205 150 245 150 245 168 C245 172 235 175 210 172 Z" fill="#1E272C"/>
-          {/* Face Details (Happy Expression) */}
           <circle cx="232" cy="178" r="1.5" fill="#1E272C"/>
           <path d="M228 186 Q232 190 235 185" stroke="#1E272C" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
 
-          {/* Legs & Yellow Pants */}
           <path d="M170 325 C170 325 165 375 235 375 L255 420 L285 420 L270 365 C260 330 240 325 240 325 Z" fill="#FBD057" stroke="#1E272C" strokeWidth="2.5"/>
           <path d="M170 325 Q230 310 280 370 L305 415 L335 415 L295 330" stroke="#1E272C" strokeWidth="2.5" fill="none" strokeLinejoin="round"/>
 
-          {/* Left Arm & Hand on Laptop */}
           <path d="M155 255 Q210 270 245 270" stroke="#1E272C" strokeWidth="12" strokeLinecap="round" fill="none"/>
           <path d="M240 270 L250 273" stroke="#FDE399" strokeWidth="8" strokeLinecap="round"/>
 
-          {/* Shoes (Sneakers) */}
           <rect x="230" y="420" width="40" height="14" rx="4" fill="#1E272C"/>
           <rect x="290" y="415" width="40" height="14" rx="4" fill="#1E272C"/>
           <rect x="235" y="420" width="15" height="4" fill="#FFFFFF"/>
           <rect x="295" y="415" width="15" height="4" fill="#FFFFFF"/>
         </g>
 
-        {/* ── THE LAPTOP / TABLET (QuizTech) ── */}
         <g transform="translate(250, 245)">
-          {/* Screen Body */}
           <polygon points="5,5 72,-5 60,55 -2,60" fill="#FFFFFF" stroke="#1E272C" strokeWidth="3"/>
-          {/* Inner Screen Canvas */}
           <polygon points="10,8 67,-1 56,51 3,55" fill="#FDE399" opacity="0.3"/>
-          {/* Screen Support Stand */}
           <path d="M68 25 L80 50" stroke="#1E272C" strokeWidth="2.5"/>
         </g>
 
-        {/* ── MAIN DESK TABLE ── */}
         <g id="desk">
-          {/* Table Surface Board */}
           <rect x="60" y="275" width="355" height="8" rx="2" fill="#FBD057" stroke="#1E272C" strokeWidth="2.5"/>
-          {/* Heavy Desk Legs Structure */}
           <path d="M85 283 L60 440 M355 283 L380 440" stroke="#1E272C" strokeWidth="4.5" strokeLinecap="round"/>
           <path d="M125 283 L125 330 M335 283 L345 360" stroke="#1E272C" strokeWidth="3" strokeLinecap="round"/>
         </g>
 
-        {/* ── TECH BACKPACK (Bottom Right) ── */}
         <g transform="translate(325, 335)">
-          {/* Main Bag Frame */}
           <path d="M10 30 C10 10 30 0 50 0 C70 0 90 10 90 30 L95 85 C95 95 85 100 50 100 C15 100 5 95 5 85 Z" fill="#FBD057" stroke="#1E272C" strokeWidth="3" strokeLinejoin="round"/>
-          {/* Front Pocket */}
           <path d="M12 50 C12 45 25 40 50 40 C75 40 88 45 88 50 L85 85 C85 92 75 95 50 95 C25 95 15 92 15 85 Z" fill="#FFFFFF" stroke="#1E272C" strokeWidth="2.5"/>
-          {/* Grab Handle */}
           <path d="M38 0 C38 -8 62 -8 62 0" stroke="#1E272C" strokeWidth="2.5" fill="none"/>
-          {/* Pocket Clasp Buckle */}
           <rect x="44" y="65" width="12" height="12" rx="2" fill="#FFFFFF" stroke="#1E272C" strokeWidth="2"/>
           <line x1="50" y1="65" x2="50" y2="77" stroke="#1E272C" strokeWidth="1.5"/>
         </g>
@@ -559,7 +513,7 @@ function TestimonialCard({ name, role, text, rating, visible, delay }) {
       </div>
     </div>);
 }
-// ── MAIN PAGE ──────────────────────────────────────────────────────────────
+
 export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
     const [heroRef, heroVis] = useInView(0.08);
     const [featRef, featVis] = useInView(0.08);
@@ -710,7 +664,7 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
 
       <Navbar onNavigateLogin={onNavigateLogin}/>
 
-      {/* ── HERO ─────────────────────────────────────────────────────────── */}
+{/* Hero-Section */}
       <section id="accueil" ref={heroRef} style={{
             minHeight: "100vh",
             display: "flex",
@@ -748,9 +702,9 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
             width: "100%",
         }}>
           <div className="ht-hero-grid" style={{ display: "flex", alignItems: "center", gap: 60 }}>
-            {/* Text side */}
+            
             <div style={{ flex: 1, minWidth: 0 }}>
-              {/* Headline */}
+            
               <h1 style={{
             ...fadeUp(heroVis, 0.1),
             fontWeight: 800,
@@ -793,7 +747,7 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
                 étudiants, enseignants et administration de l'école.
               </p>
 
-              {/* CTAs */}
+             
               <div style={{
             ...fadeUp(heroVis, 0.3),
             display: "flex",
@@ -847,7 +801,7 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
               </div>
             </div>
 
-            {/* Illustration */}
+           
             <div style={{
             ...fadeUp(heroVis, 0.15),
             flex: 1,
@@ -860,7 +814,8 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
         </div>
       </section>
 
-      {/* ── FEATURES ─────────────────────────────────────────────────────── */}
+
+{/* Features-Section */}
       <section id="fonctionnalites" ref={featRef} style={{ padding: "100px 24px", background: "#f8fafc" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{
@@ -908,7 +863,7 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ─────────────────────────────────────────────────── */}
+{/* Commentçafonctionne-Section */}
       <section ref={stepsRef} style={{ padding: "100px 24px", background: "#fff" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{
@@ -959,7 +914,6 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
         </div>
       </section>
 
-      {/* ── MANAGEMENT ───────────────────────────────────────────────────── */}
       <section ref={mgmtRef} style={{
             padding: "100px 24px",
             background: `linear-gradient(160deg, rgba(253, 227, 153, 0.2), #f8fafc)`,
@@ -1010,7 +964,7 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
         </div>
       </section>
 
-      {/* ── ABOUT ────────────────────────────────────────────────────────── */}
+{/* About-Section */}
       <section id="apropos" ref={aboutRef} style={{ padding: "100px 24px", background: "#fff" }}>
         <div className="ht-about-wrap" style={{
             maxWidth: 1100,
@@ -1035,24 +989,19 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
             overflow: "hidden",
         }}>
               <svg width="180" height="150" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                {/* Stylized Golden Roof */}
                 <path d="M 12 36 L 60 10 L 108 36" stroke={GD} strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
                 <path d="M 20 38 Q 60 22 100 38" stroke={GD} strokeWidth="4" strokeLinecap="round" fill="none"/>
 
-                {/* HIGH-TECH Text */}
                 <text x="60" y="58" textAnchor="middle" fill={GD} fontSize="20" fontWeight="900" fontFamily="sans-serif" letterSpacing="0.2">
                   HIGH-TECH
                 </text>
 
-                {/* Golden separator line */}
                 <line x1="12" y1="65" x2="108" y2="65" stroke={GD} strokeWidth="2"/>
 
-                {/* Subtitle */}
                 <text x="60" y="73" textAnchor="middle" fill={GD} fontSize="5" fontWeight="bold" fontFamily="sans-serif" letterSpacing="0.1">
                   ECOLES D'ENSEIGNEMENT SUPÉRIEUR
                 </text>
 
-                {/* Red badge */}
                 <rect x="12" y="78" width="96" height="14" rx="2" fill="#E11D48"/>
                 <text x="60" y="88" textAnchor="middle" fill="#FFFFFF" fontSize="7" fontWeight="bold" fontFamily="sans-serif" letterSpacing="0.3">
                   RECONNUE PAR L'ÉTAT
@@ -1092,7 +1041,6 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
             </div>
           </div>
 
-          {/* Text */}
           <div style={{ flex: 1, minWidth: 280 }}>
             <div style={fadeUp(aboutVis, 0.12)}>
               <span style={{
@@ -1185,7 +1133,7 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
         </div>
       </section>
 
-      {/* ── STATS ────────────────────────────────────────────────────────── */}
+{/* Stats-Section */}
       <section ref={statsRef} style={{
             padding: "80px 24px",
             background: `linear-gradient(135deg, ${GD}, ${G})`,
@@ -1246,7 +1194,7 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ─────────────────────────────────────────────────── */}
+{/* Testimonials-Section */}
       <section ref={testiRef} style={{ padding: "100px 24px", background: "#f8fafc" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{
@@ -1284,7 +1232,7 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
         </div>
       </section>
 
-      {/* ── CONTACT ──────────────────────────────────────────────────────── */}
+{/* Contact-Section */}
       <section id="contact" ref={contactRef} style={{
             padding: "110px 24px",
             background: "linear-gradient(180deg,#f8fafc,#ffffff)",
@@ -1336,7 +1284,6 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
             </p>
           </div>
 
-          {/* Main support card */}
           <div style={{
             ...fadeUp(contactVis, 0.1),
             background: "#fff",
@@ -1496,7 +1443,6 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
                   </div>))}
               </div>
 
-              {/* CTA buttons */}
               <div style={{
             display: "flex",
             gap: 14,
@@ -1553,7 +1499,6 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
                 </a>
               </div>
 
-              {/* Support categories */}
               <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(200px,1fr))",
@@ -1598,7 +1543,6 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
                   </div>))}
               </div>
 
-              {/* Footer note */}
               <div style={{
             padding: "16px 20px",
             borderRadius: 16,
@@ -1619,7 +1563,6 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
         </div>
       </section>
 
-      <ChatAssistant />
       
     </div>);
 }

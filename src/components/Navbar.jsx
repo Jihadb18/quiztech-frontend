@@ -1,7 +1,4 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
+
 import React, { useState } from "react";
 import { LogOut, Settings, Clock, Bell, BellRing, CheckCircle2, AlertCircle, Clock as ClockIcon, Trash2, Eye, EyeOff, } from "lucide-react";
 export default function Navbar({ currentUser, onLogout, onNavigateLogin, onTriggerProfileSettings, currentClock, notifications = [], onSyncNotifications, }) {
@@ -65,9 +62,9 @@ export default function Navbar({ currentUser, onLogout, onNavigateLogin, onTrigg
             {/* Real-time Clock display */}
             <div className="hidden sm:flex items-center gap-2 bg-slate-50 border border-slate-200/60 px-3 py-1.5 rounded-full text-slate-700 font-mono text-xs">
               <ClockIcon className="w-3.5 h-3.5 text-amber-500 animate-pulse"/>
-              <span>{currentClock}</span>
+              <span>{currentClock}  </span>
               <span className="text-[10px] text-slate-400 font-sans font-bold uppercase">
-                &bull; A.U. 2025-2026
+                 A.U. 2025-2026
               </span>
             </div>
 
@@ -87,80 +84,78 @@ export default function Navbar({ currentUser, onLogout, onNavigateLogin, onTrigg
                       </span>)}
                   </button>
 
-                  {notificationsOpen && (<div className="absolute right-[-40px] sm:right-0 mt-2.5 w-[280px] sm:w-[360px] bg-white rounded-xl shadow-2xl border border-slate-100 overflow-hidden transform origin-top-right transition-all z-50 text-xs">
-                      {/* Header */}
-                      <div className="px-4 py-3 bg-slate-50 border-b border-slate-100 flex justify-between items-center text-[11px] font-bold">
-                        <span className="text-slate-700 uppercase tracking-widest font-black flex items-center gap-1.5">
-                          Alertes Système ({unreadCount} non lues)
-                        </span>
-                        {userNotifications.length > 0 && (<div className="flex gap-2">
-                            <button onClick={handleMarkAllRead} className="text-indigo-600 hover:text-indigo-800 transition-colors uppercase font-black tracking-wider cursor-pointer">
-                              Tout lire
-                            </button>
-                            <span className="text-slate-300">|</span>
-                            <button onClick={handleClearAll} className="text-red-500 hover:text-red-700 transition-colors uppercase font-black tracking-wider cursor-pointer">
-                              Vider
-                            </button>
-                          </div>)}
-                      </div>
 
-                      {/* Notifications Container */}
-                      <div className="max-h-[320px] overflow-y-auto divide-y divide-slate-100">
-                        {userNotifications.length === 0 ? (<div className="p-8 text-center text-slate-400 font-semibold space-y-2">
-                            <Bell className="w-8 h-8 text-slate-300 mx-auto"/>
-                            <p>Aucune notification de sécurité ou d'activité pour le moment.</p>
-                          </div>) : (userNotifications.map((notif) => {
-                    const isDanger = notif.type === "alert" || notif.type === "warning" || notif.type === "DANGER" || notif.type?.toLowerCase() === "security";
-                    const isValidation = notif.type === "success" || notif.type === "VALIDATION" || notif.type?.toLowerCase() === "success";
-                    const msg = notif.content || notif.message;
-                    const timeVal = notif.date || notif.timestamp;
-                    return (<div key={notif.id} className={`p-3.5 flex gap-3 transition-colors ${notif.isRead ? "bg-white opacity-70" : "bg-sky-50/20 font-medium"} hover:bg-slate-50/50`}>
-                                {/* Circle icon indicator */}
-                                <div className="mt-0.5 shrink-0">
-                                  {isDanger ? (<div className="w-7 h-7 bg-red-100 rounded-full flex items-center justify-center text-red-650">
-                                      <AlertCircle className="w-4 h-4"/>
-                                    </div>) : isValidation ? (<div className="w-7 h-7 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-650">
-                                      <CheckCircle2 className="w-4 h-4"/>
-                                    </div>) : (<div className="w-7 h-7 bg-amber-100 rounded-full flex items-center justify-center text-amber-500">
-                                      <Clock className="w-4 h-4"/>
-                                    </div>)}
-                                </div>
+{notificationsOpen && (
+  <div className="absolute right-0 mt-3 w-[380px] bg-white rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] border border-slate-100 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
+    
+    {/* Header - Minimalist */}
+    <div className="px-5 py-4 bg-white border-b border-slate-50 flex justify-between items-center">
+      <h3 className="font-black text-slate-900 text-xs uppercase tracking-widest flex items-center gap-2">
+        Alertes Système
+      </h3>
+      {userNotifications.length > 0 && (
+        <button onClick={handleMarkAllRead} className="text-[10px] font-black text-indigo-600 hover:bg-indigo-50 px-2 py-1 rounded-lg transition-colors uppercase">
+          Tout marquer lu
+        </button>
+      )}
+    </div>
 
-                                {/* Body */}
-                                <div className="flex-1 space-y-1 min-w-0">
-                                  <div className="flex justify-between items-start gap-2">
-                                    <h4 className="font-extrabold text-slate-900 leading-snug truncate">
-                                      {notif.title}
-                                    </h4>
-                                    <span className="text-[9px] text-slate-400 shrink-0 font-mono">
-                                      {timeVal?.split("T")[1]?.slice(0, 5) || "Juste là"}
-                                    </span>
-                                  </div>
-                                  <p className="text-slate-600 font-semibold text-[11px] leading-relaxed break-words text-left">
-                                    {msg}
-                                  </p>
+    {/* Notifications Container */}
+    <div className="max-h-[400px] overflow-y-auto scrollbar-hide">
+      {userNotifications.length === 0 ? (
+        <div className="p-10 text-center space-y-3">
+          <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center mx-auto text-slate-300">
+            <Bell className="w-5 h-5"/>
+          </div>
+          <p className="text-slate-400 font-medium text-xs">Aucune notification.</p>
+        </div>
+      ) : (
+        userNotifications.map((notif) => {
+          const isDanger = ["alert", "warning", "DANGER", "security"].includes(notif.type);
+          const isSuccess = ["success", "VALIDATION"].includes(notif.type);
+          
+          return (
+            <div key={notif.id} className={`group p-4 flex gap-4 transition-all hover:bg-slate-50 border-b border-slate-50 last:border-0 ${!notif.isRead ? "bg-indigo-50/20" : ""}`}>
+              {/* Icon */}
+              <div className={`mt-0.5 w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                isDanger ? "bg-red-50 text-red-500" : isSuccess ? "bg-emerald-50 text-emerald-500" : "bg-amber-50 text-amber-500"
+              }`}>
+                {isDanger ? <AlertCircle className="w-4 h-4"/> : isSuccess ? <CheckCircle2 className="w-4 h-4"/> : <Clock className="w-4 h-4"/>}
+              </div>
 
-                                  {/* Utility Actions row on each item */}
-                                  <div className="pt-1.5 flex gap-3 text-[10px] text-slate-400 select-none">
-                                    <button onClick={(e) => handleToggleRead(e, notif.id)} className="hover:text-indigo-600 transition-colors font-extrabold cursor-pointer flex items-center gap-1">
-                                      {notif.isRead ? (<>
-                                          <EyeOff className="w-3 h-3"/>
-                                          Marquer non-lu
-                                        </>) : (<>
-                                          <Eye className="w-3 h-3"/>
-                                          Marquer lu
-                                        </>)}
-                                    </button>
-                                    <button onClick={(e) => handleDeleteNotif(e, notif.id)} className="hover:text-red-650 transition-colors font-extrabold cursor-pointer flex items-center gap-1 ml-auto">
-                                      <Trash2 className="w-3 h-3"/>
-                                      Effacer
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>);
-                }))}
-                      </div>
-                    </div>)}
+              {/* Content */}
+              <div className="flex-1 min-w-0 space-y-1">
+                <div className="flex justify-between items-center">
+                  <h4 className="font-black text-slate-800 text-[11px] truncate">{notif.title}</h4>
+                  <span className="text-[9px] text-slate-400 font-mono">{notif.date?.split("T")[1]?.slice(0, 5)}</span>
+                </div>
+                <p className="text-slate-500 font-medium text-[11px] leading-relaxed line-clamp-2">{notif.content || notif.message}</p>
+                
+                {/* Footer Actions */}
+                <div className="flex gap-4 pt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button onClick={(e) => handleToggleRead(e, notif.id)} className="text-[9px] font-black text-slate-400 hover:text-indigo-600 uppercase">
+                    {notif.isRead ? "Non-lu" : "Lu"}
+                  </button>
+                  <button onClick={(e) => handleDeleteNotif(e, notif.id)} className="text-[9px] font-black text-slate-400 hover:text-red-600 uppercase">
+                    Effacer
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })
+      )}
+    </div>
+    
+    {/* Clear All Footer */}
+    {userNotifications.length > 0 && (
+      <button onClick={handleClearAll} className="w-full py-3 text-[10px] font-black text-red-500 hover:bg-red-50 border-t border-slate-50 transition-colors uppercase">
+        Vider toutes les notifications
+      </button>
+    )}
+  </div>
+)}
+                
                 </div>
 
                 {/* Avatar Profile Dropdown */}
@@ -170,9 +165,7 @@ export default function Navbar({ currentUser, onLogout, onNavigateLogin, onTrigg
                 setNotificationsOpen(false);
             }} className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#F4C542] p-1.5 rounded-full hover:bg-slate-50 transition-all border border-slate-100 cursor-pointer">
                     <img id="current-navbar-avatar" src={currentUser.profilePic || currentUser.avatarUrl || `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(currentUser.name)}`} alt={currentUser.name} className="w-8 h-8 rounded-full border border-slate-200 bg-white object-cover" onError={(e) => {
-                e.target.src =
-                    "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%23ccc'><circle cx='50' cy='50' r='50'/></svg>";
-            }}/>
+                 }}/>
 
                     <span className="hidden sm:inline text-xs font-bold text-slate-700 capitalize max-w-[120px] truncate">
                       {(currentUser.name || currentUser.fullName || "").split(" ")[0]}

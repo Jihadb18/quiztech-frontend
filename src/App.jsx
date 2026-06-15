@@ -1,7 +1,4 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
+
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -10,7 +7,6 @@ import LoginPage from "./components/LoginPage";
 import ProfilePicUploader from "./components/ProfilePicUploader";
 import AdminDashboard from "./components/AdminDashboard";
 
-// Types and DB elements
 import { getStored, setStored, initializeMockDB, INITIAL_USERS, INITIAL_SUBJECTS, INITIAL_CLASSES, INITIAL_EXAMS, INITIAL_SUBMISSIONS, INITIAL_AUDIT_LOGS, INITIAL_NOTIFICATIONS, INITIAL_ANNOUNCEMENTS, INITIAL_RESOURCES, } from "./db/mockData";
 export default function App() {
     const [currentUser, setCurrentUser] = useState(() => {
@@ -30,14 +26,12 @@ export default function App() {
         if (storedUser) {
             return "dashboard";
         }
-        // Check initial hash
         const hash = window.location.hash;
         if (hash === "#/login")
             return "login";
         return "landing";
     });
     const [showProfileModal, setShowProfileModal] = useState(false);
-    // Sync back current user details to localStorage
     const syncCurrentUser = (user) => {
         setCurrentUser(user);
         if (user) {
@@ -47,7 +41,6 @@ export default function App() {
             localStorage.removeItem("qt_current_user");
         }
     };
-    // Core Datatables Database States loaded out of localStorage
     const [users, setUsers] = useState([]);
     const [subjects, setSubjects] = useState([]);
     const [classes, setClasses] = useState([]);
@@ -57,14 +50,10 @@ export default function App() {
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [resources, setResources] = useState([]);
-    // Active exam workspace pointers
     const [activeExam, setActiveExam] = useState(null);
     const [isPracticeMode, setIsPracticeMode] = useState(false);
-    // Real-time digital clock state updated every second
     const [currentClock, setCurrentClock] = useState("");
-    // Toast notifications alerts collection
     const [toasts, setToasts] = useState([]);
-    // 1. Initial Data seed loads
     useEffect(() => {
         initializeMockDB();
         setUsers(getStored("qt_users", INITIAL_USERS));
@@ -77,7 +66,6 @@ export default function App() {
         setAnnouncements(getStored("qt_announcements", INITIAL_ANNOUNCEMENTS));
         setResources(getStored("qt_resources", INITIAL_RESOURCES));
     }, []);
-    // 2. Real-time clock updated every second
     useEffect(() => {
         const clockTimer = setInterval(() => {
             const now = new Date();
@@ -94,7 +82,6 @@ export default function App() {
         }, 1000);
         return () => clearInterval(clockTimer);
     }, []);
-    // 3. Strict Client-side Routing and RBAC Access Guards
     useEffect(() => {
         if (activeExam) {
             if (window.location.hash !== "#/exam") {
