@@ -28,17 +28,17 @@ export const initialUsers = [
         email: "a.benjelloun@hightech.edu",
         role: "enseignant"
     },
+    
+    {
+        id: "prof-3",
+        name: "Prof. Kamil",
+        email: "t.kamil@hightech.edu",
+        role: "enseignant"
+    },
     {
         id: "student-1",
         name: "Youssef El Amrani",
         email: "youssef@hightech.edu",
-        role: "etudiant",
-        classId: "cl1"
-    },
-    {
-        id: "student-2",
-        name: "Rkia Julia",
-        email: "rkiajulia85@gmail.com",
         role: "etudiant",
         classId: "cl1"
     },

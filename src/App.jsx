@@ -6,6 +6,9 @@ import LandingPage from "./components/LandingPage";
 import LoginPage from "./components/LoginPage";
 import ProfilePicUploader from "./components/ProfilePicUploader";
 import AdminDashboard from "./components/AdminDashboard";
+import EnseignantDashboard from "./components/EnseignantDashboard";
+import EtudiantDashboard from "./components/EtudiantDashboard";
+import ExamRoom from "./components/ExamRoom";
 
 import { getStored, setStored, initializeMockDB, INITIAL_USERS, INITIAL_SUBJECTS, INITIAL_CLASSES, INITIAL_EXAMS, INITIAL_SUBMISSIONS, INITIAL_AUDIT_LOGS, INITIAL_NOTIFICATIONS, INITIAL_ANNOUNCEMENTS, INITIAL_RESOURCES, } from "./db/mockData";
 export default function App() {
@@ -498,9 +501,9 @@ export default function App() {
             {currentPage === "login" && (<LoginPage users={users} syncUsers={syncUsers} onNavigateHome={() => setCurrentPage("landing")} onLoginSuccess={handleLoginSuccess}/>)}
 
             {currentPage === "dashboard" && currentUser && (<>
-                {(((currentUser.role || "").toUpperCase() === "STUDENT" || (currentUser.role || "").toUpperCase() === "ETUDIANT")) && (<StudentDashboard currentUser={currentUser} exams={exams} submissions={submissions} subjects={subjects} classes={classes} currentClock={currentClock} onStartExam={handleStartExam} announcements={announcements} resources={resources} onSyncSubmissions={syncSubmissions}/>)}
+                {(((currentUser.role || "").toUpperCase() === "STUDENT" || (currentUser.role || "").toUpperCase() === "ETUDIANT")) && (<EtudiantDashboard currentUser={currentUser} exams={exams} submissions={submissions} subjects={subjects} classes={classes} currentClock={currentClock} onStartExam={handleStartExam} announcements={announcements} resources={resources} onSyncSubmissions={syncSubmissions}/>)}
 
-                {(((currentUser.role || "").toUpperCase() === "TEACHER" || (currentUser.role || "").toUpperCase() === "ENSEIGNANT")) && (<TeacherDashboard currentUser={currentUser} exams={exams} submissions={submissions} subjects={subjects} classes={classes} students={users} onAddExam={handleAddExamProposal} onUpdateExam={handleUpdateExamProposal} onDeleteExam={handleDeleteExamProposal} onGradeSubmission={handleGradeSubmissionByTeacher} onGrantExtraTime={handleGrantExtraTimeByTeacher} announcements={announcements} resources={resources} onSyncAnnouncements={syncAnnouncements} onSyncResources={syncResources}/>)}
+                {(((currentUser.role || "").toUpperCase() === "TEACHER" || (currentUser.role || "").toUpperCase() === "ENSEIGNANT")) && (<EnseignantDashboard currentUser={currentUser} exams={exams} submissions={submissions} subjects={subjects} classes={classes} students={users} onAddExam={handleAddExamProposal} onUpdateExam={handleUpdateExamProposal} onDeleteExam={handleDeleteExamProposal} onGradeSubmission={handleGradeSubmissionByTeacher} onGrantExtraTime={handleGrantExtraTimeByTeacher} announcements={announcements} resources={resources} onSyncAnnouncements={syncAnnouncements} onSyncResources={syncResources}/>)}
 
                 {(((currentUser.role || "").toUpperCase() === "ADMIN")) && (<AdminDashboard currentUser={currentUser} users={users} classes={classes} subjects={subjects} exams={exams} auditLogs={auditLogs} sessions={[]} // Loaded online indicator states dynamically
                  onAddUser={handleAddUser} onUpdateUser={handleUpdateUser} onDeleteUser={handleDeleteUser} onAddClass={handleAddClass} onUpdateClass={handleUpdateClass} onDeleteClass={handleDeleteClass} onAddSubject={handleAddSubject} onDeleteSubject={handleDeleteSubject} onValidateExam={handleValidateExamByAdmin} announcements={announcements} onSyncAnnouncements={syncAnnouncements} notifications={notifications} onSyncNotifications={syncNotifications} onAddNotification={addNotification}/>)}

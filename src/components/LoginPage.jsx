@@ -75,52 +75,69 @@ export default function LoginPage({ users, syncUsers, onLoginSuccess, onNavigate
         return errs;
     };
     // Handle standard connection
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setErrors({});
-        const errs = validate();
-        if (Object.keys(errs).length > 0) {
-            setErrors(errs);
-            return;
-        }
-        // Look up user
-        const foundUser = users.find((u) => u.email.toLowerCase() === email.toLowerCase().trim());
-        if (!foundUser) {
-            setErrors({
-                general: "Identifiants incorrects ou utilisateur inexistant.",
-            });
-            return;
-        }
-        // Validate password (supports standard fallback checks and newly saved customPassword)
-        const r = foundUser.role.toLowerCase();
-        const expectedPwd = (r === "etudiant" ? "student" : r === "enseignant" ? "teacher" : r) + "123"; // admin123, teacher123, student123
-        const isTempMatch = foundUser.temporaryPassword && password === foundUser.temporaryPassword;
-        const isCustomMatch = foundUser.customPassword && password === foundUser.customPassword;
-        const isTeacherShortcut = (r === "enseignant" || r === "teacher") &&
-            (password === "teacher123" || password === "prof123");
-        const isStudentShortcut = (r === "etudiant" || r === "student") && (password === "student123" || password === "eleve123" || password === "etudiant123");
-        const isAdminShortcut = (r === "admin") && password === "admin123";
-        if (password !== expectedPwd &&
-            !isTempMatch &&
-            !isCustomMatch &&
-            !isTeacherShortcut &&
-            !isStudentShortcut &&
-            !isAdminShortcut) {
-            setErrors({ general: "Mot de passe incorrect pour ce compte." });
-            return;
-        }
-        // Check if password change is forced
-        if (foundUser.forcePasswordChange) {
-            setTargetUserForPasswordChange(foundUser);
-            setPassword("");
-            return;
-        }
-        setSubmitted(true);
-        // Short premium delay or instant transition
-        setTimeout(() => {
-            onLoginSuccess(foundUser);
-        }, 600);
-    };
+const handleSubmit = (e) => {
+    e.preventDefault();
+    setErrors({});
+    const errs = validate();
+    if (Object.keys(errs).length > 0) {
+        setErrors(errs);
+        return;
+    }
+
+    // 1. Trouver l'utilisateur
+    const foundUser = users.find((u) => u.email.toLowerCase() === email.toLowerCase().trim());
+    
+    if (!foundUser) {
+        setErrors({
+            general: "Identifiants incorrects ou utilisateur inexistant.",
+        });
+        return;
+    }
+
+    // 2. Définir les variables de vérification
+    const r = foundUser.role.toLowerCase();
+    const expectedPwd = (r === "etudiant" ? "student" : r === "enseignant" ? "teacher" : r) + "123";
+    
+    const isTempMatch = foundUser.temporaryPassword && password === foundUser.temporaryPassword;
+    const isCustomMatch = foundUser.customPassword && password === foundUser.customPassword;
+    
+    const isTeacherShortcut = (r === "enseignant" || r === "teacher") && (password === "teacher123" || password === "prof123");
+    const isStudentShortcut = (r === "etudiant" || r === "student") && (password === "student123" || password === "eleve123" || password === "etudiant123");
+    const isAdminShortcut = (r === "admin" || r === "admin" ) && password === "admin123";
+    
+    // Cas spécifique pour le support
+    const isSupportLogin = email.toLowerCase() === "support@hightech.edu" && password === "admin123";
+
+    // 3. Vérification finale
+    if (password !== expectedPwd &&
+        !isTempMatch &&
+        !isCustomMatch &&
+        !isTeacherShortcut &&
+        !isStudentShortcut &&
+        !isAdminShortcut &&
+        !isSupportLogin) {
+        setErrors({ general: "Mot de passe incorrect pour ce compte." });
+        return;
+    }
+
+    // 4. Gestion du changement de mot de passe forcé
+    if (foundUser.forcePasswordChange) {
+        setTargetUserForPasswordChange(foundUser);
+        setPassword("");
+        return;
+    }
+
+    // 5. Préparation de la session (Forcer le rôle admin pour le support)
+    const userToLogin = { ...foundUser };
+    if (userToLogin.email.toLowerCase() === "support@hightech.edu") {
+        userToLogin.role = "admin"; 
+    }
+
+    setSubmitted(true);
+    setTimeout(() => {
+        onLoginSuccess(userToLogin); // Utilisation de l'utilisateur avec rôle corrigé
+    }, 600);
+};
     // Perform forced password change
     const handlePasswordChangeSubmit = (e) => {
         e.preventDefault();
@@ -206,6 +223,25 @@ export default function LoginPage({ users, syncUsers, onLoginSuccess, onNavigate
         // Transition to success screen
         setForgotStep(4);
     };
+    const handleLoginSuccess = (user) => {
+    console.log("--- DEBUG CONNEXION ---");
+    console.log("Objet utilisateur complet :", user);
+    console.log("Rôle détecté :", user.role);
+    
+    setCurrentUser(user);
+    const role = user.role.toLowerCase();
+    
+    if (role === 'admin') {
+        console.log("Redirection vers : /admin-dashboard");
+        navigate('/admin-dashboard');
+    } else if (role === 'enseignant' || role === 'teacher') {
+        console.log("Redirection vers : /teacher-dashboard");
+        navigate('/teacher-dashboard');
+    } else {
+        console.log("Redirection vers : /student-dashboard (Par défaut)");
+        navigate('/student-dashboard');
+    }
+};
     return (<div className="h-screen w-full flex bg-slate-50 font-sans antialiased overflow-hidden">
       {/* ───── LEFT SIDE: LOGO + HERO SVG + CENTERED TITLES ───── */}
       <div className="hidden lg:flex w-1/2 bg-[#FBD057] flex-col justify-center items-center p-8 overflow-hidden select-none">

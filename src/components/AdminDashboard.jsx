@@ -6,7 +6,7 @@ import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveCo
 
 export default function AdminDashboard({ currentUser, users, classes, subjects, exams, auditLogs, announcements = [], notifications = [], onSyncAnnouncements: parentSyncAnnouncements, onSyncNotifications: parentSyncNotifications, }) {
     const [activeTab, setActiveTab] = useState("stats");
-    const questions = [];
+const questions = [];
     try {
         const localQ = localStorage.getItem("qt_questions");
         if (localQ) {

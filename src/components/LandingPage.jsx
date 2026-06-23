@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { createContext, useContext } from 'react';
 import Footer from "./Footer";
 import { GraduationCap, Zap, Globe, ThumbsUp, Users, BookOpen, BarChart2, ClipboardList, Award, CheckCircle, Menu, X, Mail, Phone, Star, UserCheck, School, FileText, TrendingUp, Lock, Clock, } from "lucide-react";
 const IconTwitter = () => (<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
@@ -164,21 +165,28 @@ function Navbar({ onNavigateLogin }) {
               {l.label}
             </a>))}
           <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
-            <button onClick={() => {
-                setOpen(false);
-                onNavigateLogin();
-            }} style={{
-                flex: 1,
-                padding: "11px",
-                borderRadius: 10,
-                border: `1.5px solid ${G}`,
-                background: "transparent",
-                color: GDD,
-                fontWeight: 600,
-                cursor: "pointer",
-            }}>
-              Connexion
-            </button>
+           <button 
+  onClick={handleLoginClick} 
+  className="cursor-pointer" 
+  style={{
+    padding: "5px 15px",
+    borderRadius: 10,
+    border: `1.5px solid ${G}`,
+    background: "transparent",
+    color: GDD,
+    fontWeight: 600,
+    fontSize: 14,
+    transition: "all 0.2s",
+  }} 
+  onMouseEnter={(e) => {
+    e.currentTarget.style.background = "rgba(253, 227, 153, 0.3)";
+  }} 
+  onMouseLeave={(e) => {
+    e.currentTarget.style.background = "transparent";
+  }}
+>
+  Connexion
+</button>
           </div>
         </div>)}
     </nav>);
@@ -635,6 +643,22 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
             rating: 5,
         },
     ];
+// 1. الدالة التي ستتحكم في الانتقال مع الـ Loader
+const handleLoginClick = () => {
+  setIsLoading(true); // نظهر شاشة التحميل
+  
+  // بعد 1 ثانية، ننفذ الانتقال الفعلي
+  setTimeout(() => {
+    if (typeof onNavigateLogin === 'function') {
+      onNavigateLogin();
+    }
+  }, 1000);
+};
+
+
+
+
+
     return (<div className="w-full">
       <style>{`
         @keyframes htFloat0 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
@@ -755,28 +779,35 @@ export default function LandingPage({ onNavigateLogin, onExplorePlatforms }) {
             flexWrap: "wrap",
             marginBottom: 44,
         }}>
-                <button onClick={onNavigateLogin} className="cursor-pointer" style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            padding: "14px 26px",
-            borderRadius: 14,
-            border: "none",
-            background: GDD,
-            color: "#fff",
-            fontWeight: 705,
-            fontSize: 15,
-            boxShadow: `0 6px 24px rgba(30,39,44,0.3)`,
-            transition: "all 0.25s",
-        }} onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "translateY(-2px)";
-            e.currentTarget.style.boxShadow = `0 10px 30px rgba(30,39,44,0.35)`;
-        }} onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "";
-            e.currentTarget.style.boxShadow = `0 6px 24px rgba(30,39,44,0.3)`;
-        }}>
-                  <UserCheck size={17}/> Se connecter
-                </button>
+<button 
+  onClick={handleLoginClick} 
+  className="cursor-pointer" 
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+    padding: "14px 26px",
+    borderRadius: 14,
+    border: "none",
+    background: GDD,
+    color: "#fff",
+    fontWeight: 700, // صححت 705 لـ 700
+    fontSize: 15,
+    boxShadow: `0 6px 24px rgba(30,39,44,0.3)`,
+    transition: "all 0.25s",
+  }} 
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "translateY(-2px)";
+    e.currentTarget.style.boxShadow = `0 10px 30px rgba(30,39,44,0.35)`;
+  }} 
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "";
+    e.currentTarget.style.boxShadow = `0 6px 24px rgba(30,39,44,0.3)`;
+  }}
+>
+  <UserCheck size={17}/> Se connecter
+</button>
+
                 <button onClick={() => document.getElementById("apropos")?.scrollIntoView({ behavior: "smooth" })} className="cursor-pointer" style={{
             display: "flex",
             alignItems: "center",

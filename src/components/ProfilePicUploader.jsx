@@ -67,67 +67,70 @@ export default function ProfilePicUploader({ currentUser, onClose, onUpdateUser,
         // Revert to default placeholder
         const updatedUser = { ...currentUser, profilePic: "" };
         onUpdateUser(updatedUser);
-        setSuccess("Photo de profil supprimée. Le placeholder standard a été restauré.");
+        setSuccess("Photo de profil supprimée.");
     };
     // Resolve current avatar display
     const currentAvatarUrl = currentUser.profilePic ||
         `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(currentUser.name)}`;
     // Determine if we can show deletion button (if profilePic is a custom base64/image and not empty)
     const isCustomAvatar = !!currentUser.profilePic;
-    return (<div className="fixed inset-0 z-[100] overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in">
-      <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl border border-slate-100 overflow-hidden transform transition-all">
-        {/* Header */}
-        <div className="flex justify-between items-center px-6 py-4 bg-slate-50 border-b border-slate-100">
-          <div>
-            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-widest">
-              Paramètres du Compte
-            </h3>
-            <p className="text-xs text-slate-400 font-medium text-left">
-              Gérer vos informations d'identité académique
-            </p>
-          </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 focus:outline-none p-1.5 hover:bg-slate-200/50 rounded-full transition-colors cursor-pointer">
-            <X className="w-5 h-5"/>
-          </button>
+    return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md animate-in fade-in duration-300">
+  {/* Modal */}
+  <div className="bg-white rounded-[2.5rem] w-full max-w-lg shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] border border-slate-100 overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-8 duration-300">
+    
+    {/* Header */}
+    <div className="flex justify-between items-center px-8 py-6 bg-white border-b border-slate-50">
+      <div>
+        <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest">Paramètres</h3>
+        <p className="text-xs text-slate-400 font-medium">Gestion de votre identité académique</p>
+      </div>
+      <button onClick={onClose} className="w-10 h-10 flex items-center justify-center rounded-2xl bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-800 transition-all">
+        <X className="w-5 h-5"/>
+      </button>
+    </div>
+
+    {/* Scrollable Content Area */}
+    <div className="px-8 py-6 max-h-[70vh] overflow-y-auto custom-scrollbar space-y-8">
+      
+      {/* Status Messages */}
+      {(success || error) && (
+        <div className={`p-4 rounded-2xl text-xs font-bold flex items-center gap-3 border ${success ? "bg-green-50 text-green-700 border-green-200" : "bg-red-50 text-red-700 border-red-200"}`}>
+          {success ? <CheckCircle2 className="w-5 h-5"/> : <AlertCircle className="w-5 h-5"/>}
+          {success || error}
         </div>
+      )}
 
-        {/* Content */}
-        <div className="p-6 space-y-6">
-          {success && (<div className="p-3 bg-green-50 text-green-800 text-xs font-semibold rounded-lg flex items-center gap-2 border border-green-200 text-left">
-              <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0"/>
-              <span>{success}</span>
-            </div>)}
+     {/* Profile Section */}
+<div className="flex items-center gap-5 bg-slate-50 p-5 rounded-3xl border border-slate-100">
+  <div className="relative shrink-0">
+    <img 
+      src={currentAvatarUrl} 
+      alt={currentUser.name} 
+      className="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover" 
+      onError={(e) => e.target.src = DEFAULT_AVATAR}
+    />
+    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-[#F4C542] rounded-full border-4 border-white"/>
+  </div>
+  
+  <div className="space-y-1.5 min-w-0 flex-1">
+    <div>
+      <h4 className="font-extrabold text-slate-800 text-lg truncate">{currentUser.name}</h4>
+      <span className="inline-block px-3 py-0.5 bg-slate-900 text-white text-[10px] font-black rounded-full uppercase tracking-widest">
+        {currentUser.role}
+      </span>
+    </div>
+    
+    <div className="space-y-0.5">
+      <p className="text-xs text-slate-500 font-mono truncate">{currentUser.email}</p>
+      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+        Inscrit le : {currentUser.role === 'etudiant' ? '15/09/2025' : '01/09/2024'}
+      </p>
+    </div>
+  </div>
+</div>
 
-          {error && (<div className="p-3 bg-red-50 text-red-800 text-xs font-semibold rounded-lg flex items-center gap-2 border border-red-200 text-left">
-              <AlertCircle className="w-4 h-4 text-red-650 shrink-0"/>
-              <span>{error}</span>
-            </div>)}
-
-          {/* User Basic Info Header */}
-          <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100 text-left">
-            <div className="relative group shrink-0">
-              <img src={currentAvatarUrl} alt={currentUser.name} className="w-16 h-16 rounded-full border-2 border-[#F4C542] bg-white object-cover" onError={(e) => {
-            e.target.src = DEFAULT_AVATAR;
-        }}/>
-            </div>
-            <div className="space-y-1 min-w-0 flex-1">
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <h4 className="font-extrabold text-slate-800 text-sm truncate">
-                  {currentUser.name}
-                </h4>
-                <div className="text-[9px] bg-slate-900 text-white font-black px-2 py-0.5 rounded-full uppercase tracking-wider scale-90 border border-amber-400">
-                  {currentUser.role}
-                </div>
-              </div>
-              <p className="text-xs text-slate-500 font-mono truncate">
-                {currentUser.email}
-              </p>
-              <p className="text-[10px] text-slate-400 font-bold">
-                Inscrit le : {currentUser.role === 'etudiant' ? '15/09/2025' : '01/09/2024'}
-              </p>
-            </div>
-          </div>
-
+      
           {/* Photo Management Section */}
           <div className="space-y-3">
             <h5 className="text-xs font-bold text-slate-700 uppercase tracking-wide text-left">
@@ -151,31 +154,24 @@ export default function ProfilePicUploader({ currentUser, onClose, onUpdateUser,
               </p>
             </div>
 
-            {/* Delete photo button if custom avatar exists */}
-            {isCustomAvatar && (<button type="button" onClick={handleDeleteAvatar} className="w-full py-2 border border-red-200 text-red-650 hover:bg-red-50 font-bold text-xs rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer focus:outline-none">
-                <Trash2 className="w-4 h-4"/>
-                Supprimer ma photo actuelle
-              </button>)}
+            {isCustomAvatar && (
+  <button 
+    type="button" 
+    onClick={handleDeleteAvatar} 
+    className="group w-full py-3 border border-slate-200 hover:border-rose-200 text-slate-500 hover:text-rose-600 hover:bg-rose-50 font-bold text-xs rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer focus:outline-none active:scale-[0.98]"
+  >
+    <Trash2 className="w-4 h-4 opacity-70 group-hover:opacity-100" />
+    Supprimer ma photo actuelle
+  </button>
+)}
           </div>
 
-          {/* Academic disclaimer */}
-          <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 flex gap-2.5 items-start text-left">
-            <ShieldCheck className="w-5 h-5 text-amber-600 shrink-0 mt-0.5"/>
-            <p className="text-[10px] text-amber-900 leading-relaxed font-semibold">
-              <span className="font-bold">Remarque réglementaire :</span> Votre
-              photo de profil est intégrée à votre dossier d'évaluation d'étude.
-              Elle sera validée visuellement par les surveillants lors des accès
-              contrôlés à la salle d'examen virtuelle.
-            </p>
-          </div>
-        </div>
+      {/* Footer Button (Sticked inside scrollable or absolute bottom) */}
+      <button onClick={onClose} className="w-full py-4 bg-slate-900 text-white font-bold text-sm rounded-2xl hover:bg-slate-800 active:scale-[0.98] transition-all">
+        Enregistrer & Fermer
+      </button>
 
-        {/* Footer actions */}
-        <div className="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 bg-slate-900 text-white font-bold text-xs rounded-lg hover:bg-slate-800 transition-colors cursor-pointer">
-            Fermer l'accueil
-          </button>
-        </div>
-      </div>
-    </div>);
+    </div>
+  </div>
+</div>);
 }
